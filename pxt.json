@@ -1,0 +1,55 @@
+{
+    "name": "Minecraft Knockoff",
+    "description": "",
+    "dependencies": {
+        "device": "*",
+        "Timers": "github:microsoft/arcade-timers#v1.1.0",
+        "darts": "*",
+        "arcade-minimap": "github:microsoft/arcade-minimap#v0.6.1",
+        "corgio": "*",
+        "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.1",
+        "arcade-text": "github:microsoft/arcade-text#v1.3.0",
+        "arcade-character-animations": "github:microsoft/arcade-character-animations#v0.0.2",
+        "Sprite Grid": "github:microsoft/arcade-grid#v1.3.0"
+    },
+    "files": [
+        "main.blocks",
+        "main.ts",
+        "README.md",
+        "assets.json",
+        "images.g.jres",
+        "images.g.ts",
+        "tilemap.g.jres",
+        "tilemap.g.ts",
+        "buttons.ts"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "targetVersions": {
+        "target": "1.8.22",
+        "targetId": "arcade"
+    },
+    "supportedTargets": [
+        "arcade"
+    ],
+    "preferredEditor": "tsprj",
+    "palette": [
+        "#000000",
+        "#e9f1b1",
+        "#aaa23c",
+        "#3b3155",
+        "#797456",
+        "#00afaf",
+        "#463aa5",
+        "#6b6b6b",
+        "#aa7d66",
+        "#2a1d0d",
+        "#fe0002",
+        "#a4839f",
+        "#CBC3E3",
+        "#FFFFFF",
+        "#91463d",
+        "#000000"
+    ]
+}
