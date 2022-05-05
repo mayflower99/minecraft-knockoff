@@ -10,7 +10,8 @@
         "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.1",
         "arcade-text": "github:microsoft/arcade-text#v1.3.0",
         "arcade-character-animations": "github:microsoft/arcade-character-animations#v0.0.2",
-        "Sprite Grid": "github:microsoft/arcade-grid#v1.3.0"
+        "Sprite Grid": "github:microsoft/arcade-grid#v1.3.0",
+        "sprite-scaling": "*"
     },
     "files": [
         "main.blocks",
@@ -45,8 +46,8 @@
         "#6b6b6b",
         "#aa7d66",
         "#2a1d0d",
+        "#5614cb",
         "#fe0002",
-        "#a4839f",
         "#CBC3E3",
         "#FFFFFF",
         "#91463d",

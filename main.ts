@@ -1,9 +1,17 @@
+namespace SpriteKind {
+    export const Fireball = SpriteKind.create()
+}
+//defines steve globaly so it can be accesed from everywhere
 let steve: Sprite;
 class Inventory {
+    // the currently held item
     heldItem: number = 3
-    inventoryArray: Array<number> = [3, 2, 3, 3, 2, 3, 3, 1, 1]
-    inventoryQuantitys: Array<number> = [10, 34, 64, 23, 38, 54, 63, 38, 54]
-    invImg: Array<Image> = [assets.image`emptyInventory`, assets.image`obsidianImage`, assets.image`endstoneImage`, assets.image`swordImage`, assets.image`pickaxeImage`]
+    // every item in the inventory is represented by a number 
+    inventoryArray: Array<number> = [3, 2, 4, 5, 0, 0, 0, 0, 0]
+    inventoryQuantitys: Array<number> = [10, 34, 64, 23, 38, 54, 63, 38, 54]//later
+    // all inventory images are listed here to be used on the inventory
+    invImg: Array<Image> = [assets.image`emptyInventory`, assets.image`obsidianImage`, assets.image`endstoneImage`, assets.image`swordImage`, assets.image`pickaxeImage`, assets.image`bowImage`]
+    // the greater sprite that the images are pasted into
     inventorySprite: Sprite = sprites.create(assets.image`inventoryImage`, SpriteKind.Player)
     constructor() {
         this.render()
@@ -14,9 +22,14 @@ class Inventory {
         for (let i: number = 0; i < this.inventoryArray.length; i++) {
             //shortens inventoryArray name and gets the value at i
             let num: number = this.inventoryArray[i]
+
             for (let b: number = 0; b < 16; b++) {
+                // b is the row number of the picture being pasted
                 for (let a: number = 0; a < 16; a++) {
+                    // a is the collum number
+                    //px is the pixel color at the row and collumn in the image to be pasted onto the inventory sprite
                     let px: number = this.invImg[num].getPixel(a, b)
+                    // if the inventory slot being given an image is the held item add a border of cyan on pixels that are clear else add black
                     if (i == this.heldItem) {
                         if (px == 0) {
                             px = 5
@@ -26,6 +39,7 @@ class Inventory {
                             px = 9
                         }
                     }
+                    // set the pixel color and paste it
                     this.inventorySprite.image.setPixel(a + (i * 17), b + 2, px)
                 }
             }
@@ -33,32 +47,36 @@ class Inventory {
     }
 }
 function createSteve() {
+    //steve's sprite
     steve = sprites.create(assets.image`steveImage`, SpriteKind.Player)
+    // steve's acceleration
     steve.ay = 500
+    // set the camera to follow steve
     scene.cameraFollowSprite(steve)
 }
-
-function mapRender(collums: number, rows: number) {
-    for (let j = 0; j <= rows - 1; j++) {
-        for (let b = 0; b <= collums - 1; b++) {
-            if (map[j][b] == 1) {
-                tiles.setTileAt(tiles.getTileLocation(b, j), assets.tile`endstoneTile`)
-                tiles.setWallAt(tiles.getTileLocation(b, j), true)
-            } else if (map[j][b] == 3) {
-                tiles.setTileAt(tiles.getTileLocation(b, j), assets.tile`obsidianTile`)
-            } else if (map[j][b] == 2) {
-                tiles.setTileAt(tiles.getTileLocation(b, j), assets.tile`bedrockTile`)
-            }
-        }
-    }
-    tiles.setCurrentTilemap(endTilemap)
-}
-
 function generateMap(rows: number, collums: number) {
+    // creates a 2d array like this
+    /*
+        [
+        [1,2,4,5,6,7,7,5],
+        [1,2,4,5,6,7,7,5],
+        [1,2,4,5,6,7,7,5],
+        [1,2,4,5,6,7,7,5],
+        [1,2,4,5,6,7,7,5],
+        [1,2,4,5,6,7,7,5],
+        [1,2,4,5,6,7,7,5],
+        [1,2,4,5,6,7,7,5],
+        [1,2,4,5,6,7,7,5]
+        ]
+    */  
+    // in the variable map from a picture("littleMap" in assets) based on pixel color
+    //each number represents a tile that needs to be added to the tilemap
     for (let i = 0; i <= rows - 1; i++) {
+        // adds arrays
         map.push([])
         console.log(i)
         for (let a = 0; a <= collums - 1; a++) {
+            //adds numbers
             if (lilMap.getPixel(a, i) == 3) {
                 map[i].push(3)
             } else if (lilMap.getPixel(a, i) == 1) {
@@ -77,15 +95,36 @@ function generateMap(rows: number, collums: number) {
     // 2 = bedrock
     //
     // 0 = blank
+
     mapRender(collums, rows)
 }
+function mapRender(collums: number, rows: number) {
+    // adds the tiles based on the numbers in map and sets walls to keep you from walking through the floor.
+    for (let j = 0; j <= rows - 1; j++) {
+        for (let b = 0; b <= collums - 1; b++) {
+            if (map[j][b] == 1) {
+                tiles.setTileAt(tiles.getTileLocation(b, j), assets.tile`endstoneTile`)
+                tiles.setWallAt(tiles.getTileLocation(b, j), true)
+            } else if (map[j][b] == 3) {
+                tiles.setTileAt(tiles.getTileLocation(b, j), assets.tile`obsidianTile`)
+            } else if (map[j][b] == 2) {
+                tiles.setTileAt(tiles.getTileLocation(b, j), assets.tile`bedrockTile`)
+                tiles.setWallAt(tiles.getTileLocation(b, j), true)
+            }
+        }
+    }
+    // sets the tile map
+    tiles.setCurrentTilemap(endTilemap)
+}
+
+
 class EnderDragon {
     sprite: Sprite = sprites.create(assets.image`enderDragonImage`, SpriteKind.Enemy)
     health: StatusBarSprite = statusbars.create(125, 4, 1)
     constructor() {
         this.createBossBar()
-        this.flyRight(100)
-        this.flyDown(randint(1, 20))
+        //this.flyRight(100)
+        //this.flyDown(randint(1, 20))
     }
 
     flyRight(velocity: number) {
@@ -106,10 +145,10 @@ class EnderDragon {
     }
     collums() {
         if (this.sprite.isHittingTile(CollisionDirection.Left)) {
-            this.flyRight(100)
+            this.flyRight(1000)
         }
         if (this.sprite.isHittingTile(CollisionDirection.Right)) {
-            this.flyLeft(100)
+            this.flyLeft(1000)
         }
         if (this.sprite.isHittingTile(CollisionDirection.Bottom)) {
             this.flyUp(Math.randomRange(0, 20))
@@ -117,6 +156,46 @@ class EnderDragon {
         if (this.sprite.isHittingTile(CollisionDirection.Top)) {
             this.flyDown(Math.randomRange(0, 20))
         }
+    }
+    breathe(velocity:number){
+        let angle = Math.atan2(this.sprite.y-steve.y,this.sprite.x-steve.x)
+        let vy = Math.sin(angle)
+        let vx = Math.cos(angle)
+        let fireball = sprites.create(assets.image`fireballImage`, SpriteKind.Fireball)
+        fireball.setPosition(this.sprite.x,this.sprite.y)
+        fireball.setFlag(SpriteFlag.DestroyOnWall,true)
+        fireball.setVelocity(-vx * velocity, -vy * velocity)
+
+        
+    }
+    perch(){
+        for(let i = 0; i < map.length; i++ ){
+            for(let a = 0; a < map[0].length;a++){
+                let num = 0
+                if(map[i][a] == 2){
+                    num++
+                }
+                if(num > 1){
+                    let bed:Array<number> = []
+                    for(let b = a; b< map.length;b++){
+                        if(map[i][a] == 2){
+                            bed.push(map[i][b])
+                        }else{
+                            break
+                        }
+                    }
+                    break
+                }else{
+                    num--
+                }
+
+            }
+        }
+        
+        let angle = Math.atan2(this.sprite.y - steve.y, this.sprite.x - steve.x)
+        let vy = Math.sin(angle)
+        let vx = Math.cos(angle)
+
     }
     createBossBar() {
         this.health.setColor(3, 4, 2)
@@ -179,13 +258,28 @@ game.onUpdate(function () {
     }
 })
 //              D   R   A   G   O   N     A   I
+let perching = false
 game.onUpdateInterval(500, function () {
+    timer.debounce("action", 120000, function() {
+        perching = true
+    })
     let steveDist = Math.sqrt((steve.x - enderDragon.sprite.x) ** 2 + (steve.y - enderDragon.sprite.y) ** 2)
-    if (steveDist <= 60) {
-        /* enderDragon.flyLeft(100) */
-    } else {
-        enderDragon.collums()
+    if(!perching){
+        if (steveDist <= 60) {
+            timer.throttle("action", 2000, function() {
+                enderDragon.breathe(100)           
+            })
+        } else {
+            enderDragon.collums()
+        }        
+    }else{
+        enderDragon.perch()
     }
+
+})
+sprites.onDestroyed(SpriteKind.Fireball, function(sprite: Sprite) {
+    let dragonsBreath = sprites.create(assets.image`dragonsBreathImage`, SpriteKind.Player)
+    dragonsBreath.setPosition(sprite.x,sprite.y+8)
 })
 //  Inventory Render
 game.onUpdate(function () {
